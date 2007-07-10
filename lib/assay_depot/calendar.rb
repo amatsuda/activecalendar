@@ -41,7 +41,7 @@ module ActionView
           datetime = value(object).strftime("%a %B %d %Y %I:%M %p")
         end
 
-        html  = %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" readonly="1" />\n)
+        html  = %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date & Time selector" />\n)
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
