@@ -13,7 +13,7 @@ module ActionView
         if value(object) == nil
           date = ""
         else
-          date = value(object).strftime("%a %B %d %Y")
+          date = value(object).strftime("%m/%d/%Y")
         end
 
 				html  = %(<input type="text" name="#{options[:name]}" value="#{date}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
@@ -38,7 +38,7 @@ module ActionView
         if value(object) == nil
           datetime = ""
         else
-          datetime = value(object).strftime("%a %B %d %Y %I:%M %p")
+          datetime = value(object).strftime("%m/%d/%Y %I:%M %p")
         end
 
         html  = %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
