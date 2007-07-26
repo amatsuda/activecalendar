@@ -87,3 +87,115 @@ module ActionView
     end
   end
 end
+
+
+#
+# The following code is adapted from Stuart Rackhman's Data Validator available here: http://snippets.dzone.com/posts/show/1548
+#
+ActiveRecord::Validations::ClassMethods.class_eval do
+  # Validates date values, these can be dates or any formats accepted by
+  # Date.parse_date.
+  #
+  # For example:
+  #
+  #   class Person < ActiveRecord::Base
+  #     require_dependency 'date_validator'
+  #     validates_dates :birthday,
+  #                     :from => '1 Jan 1920',
+  #                     :to => Date.today,
+  #                     :allow_nil => true
+  #   end
+  #
+  # Options:
+  # * from - Minimum allowed date. May be a date or a string recognized
+  #   by Date.parse_date.
+  # * to - Maxumum allowed date. May be a date or a string recognized
+  #   by Date.parse_date.
+  # * allow_nil - Attribute may be nil; skip validation.
+  #
+  def validates_as_date(*attr_names)
+    configuration =
+      { :message => 'is an invalid date',
+        :on => :save,
+      }
+    configuration.update(attr_names.pop) if attr_names.last.is_a?(Hash)
+    # Don't let validates_each handle allow_nils, it checks the cast value.
+    allow_nil = configuration.delete(:allow_nil)
+    from = Date.parse_date(configuration.delete(:from))
+    to = Date.parse_date(configuration.delete(:to))
+    validates_each(attr_names, configuration) do |record, attr_name, value|
+      before_cast = record.send("#{attr_name}_before_type_cast")
+      next if allow_nil and (before_cast.nil? or before_cast == '')
+      begin
+        date = Date.parse_date(before_cast)
+      rescue
+        record.errors.add(attr_name, configuration[:message])
+      else
+        if from and date < from
+          record.errors.add(attr_name,
+                            "cannot be less than #{from.strftime('%e-%b-%Y')}")
+        end
+        if to and date > to
+          record.errors.add(attr_name,
+                            "cannot be greater than #{to.strftime('%e-%b-%Y')}")
+        end
+      end
+    end
+  end
+end
+
+
+class Date
+  # Parse date string with one of the following formats:
+  #
+  # * mm/dd/yyyy: example: 11/28/1976
+  # * mm/dd/yyyy hh:mm [A|P]M: example: 11/28/1976 3:45 PM
+  #
+  # The string argument is first converted to a string with #to_s.
+  # Returns nil if passed nil or an empty string.
+  # Raises ArgumentError if string can't be parsed.
+  #
+  def self.parse_date(string)
+    string = string.to_s.strip.downcase
+    return nil if string.empty?
+
+    date_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/
+    datetime_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2}):(\d{1,2})\s+([a|p]m)$/i
+
+    if string.match(date_regex)
+      # mm/dd/yyyy
+      (( m, d, y )) = string.scan(date_regex)
+      begin
+        result = Date.new(y.to_i, m.to_i, d.to_i)
+      rescue
+        raise ArgumentError
+      end
+    elsif string.match(datetime_regex)
+      # mm/dd/yyyy hh:mm am
+      (( m, d, y, h, min, a )) = string.scan(datetime_regex)
+      begin
+        if a == "pm"
+          h = h.to_i
+          h += 12
+        end
+        result = DateTime.new(y.to_i, m.to_i, d.to_i, h.to_i, min.to_i)
+      rescue
+        raise ArgumentError
+      end
+    else
+      raise ArgumentError
+    end
+    result
+  end
+end
+
+# Override default date type cast class method to handle Date.parse_date
+# formats(the default implementation returns nil if passed an unrecognized date
+# format).
+#
+class ActiveRecord::ConnectionAdapters::Column
+  def self.string_to_date(string)
+    return string unless string.is_a?(String)
+    Date.parse_date(string) rescue nil
+  end
+end
