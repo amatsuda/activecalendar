@@ -17,7 +17,6 @@ module ActionView
         end
 
         error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
-
         html  = ""
         if error
           html << %(<div class="fieldWithErrors"> \n)
@@ -53,7 +52,6 @@ module ActionView
         end
 
         error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
-
         html  = ""
         if error
           html << %(<div class="fieldWithErrors"> \n)
