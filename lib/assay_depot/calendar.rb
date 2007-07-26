@@ -24,11 +24,6 @@ module ActionView
         end
 
         html << %(<input type="text" name="#{options[:name]}" value="#{date}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
-
-        if error
-          html << %(</div> \n)
-        end
-
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date selector" />\n)
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
@@ -38,6 +33,10 @@ module ActionView
         html << %(        singleClick    :    true\n)
         html << %(    }\);\n)
         html << %(</script>\n)
+
+        if error
+          html << %(</div> \n)
+        end
 
         html
       end
@@ -61,11 +60,6 @@ module ActionView
         end
 
         html << %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
-
-        if error
-          html << %(</div> \n)
-        end
-
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date & Time selector" />\n)
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
@@ -77,6 +71,10 @@ module ActionView
         html << %(        time24         :    false \n)
         html << %(    }\);\n)
         html << %(</script>\n)
+
+        if error
+          html << %(</div> \n)
+        end
 
         html
       end
