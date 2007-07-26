@@ -16,7 +16,14 @@ module ActionView
           date = value(object).strftime("%m/%d/%Y")
         end
 
-				html  = %(<input type="text" name="#{options[:name]}" value="#{date}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
+        error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
+
+        html  = ""
+        if error
+          html << %(<div class="fieldWithErrors"> \n)
+        end
+
+        html << %(<input type="text" name="#{options[:name]}" value="#{date}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date selector" />\n)
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
@@ -26,7 +33,11 @@ module ActionView
         html << %(        singleClick    :    true\n)
         html << %(    }\);\n)
         html << %(</script>\n)
-        
+
+        if error
+          html << %(</div> \n)
+        end
+
         html
       end
       
@@ -41,7 +52,14 @@ module ActionView
           datetime = value(object).strftime("%m/%d/%Y %I:%M %p")
         end
 
-        html  = %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
+        error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
+
+        html  = ""
+        if error
+          html << %(<div class="fieldWithErrors"> \n)
+        end
+
+        html << %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date & Time selector" />\n)
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
@@ -53,7 +71,11 @@ module ActionView
         html << %(        time24         :    false \n)
         html << %(    }\);\n)
         html << %(</script>\n)
-        
+
+        if error
+          html << %(</div> \n)
+        end
+
         html
       end
     end
