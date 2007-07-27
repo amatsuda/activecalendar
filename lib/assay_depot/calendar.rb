@@ -213,9 +213,9 @@ end
 # formats(the default implementation returns nil if passed an unrecognized date
 # format).
 #
-class ActiveRecord::ConnectionAdapters::Column
-  def self.string_to_date(string)
-    return string unless string.is_a?(String)
-    Date.parse_date(string) rescue nil
-  end
-end
+#class ActiveRecord::ConnectionAdapters::Column
+#  def self.string_to_date(string)
+#    return string unless string.is_a?(String)
+#    Date.parse_date(string) rescue nil
+#  end
+#end
