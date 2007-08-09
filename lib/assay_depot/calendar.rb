@@ -24,11 +24,24 @@ module ActionView
 
         html << %(<input type="text" name="#{options[:name]}" value="#{date}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date selector" />\n)
+
+        calendar_options = Hash.new
+        calendar_options.replace(options)
+        calendar_options["inputField"] ||= "#{options[:id]}"
+        calendar_options["ifFormat"] ||= "%m/%d/%Y"
+        calendar_options["button"] ||= "#{options[:id]}_trigger"
+        calendar_options.delete_if { | key, value |
+          [ :name, :class, :id, :object_name, :method ].include? key
+        }
+
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
-        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
-        html << %(        ifFormat       :    "%m/%d/%Y",      // format of the input field\n)
-        html << %(        button         :    "#{options[:id]}_trigger",  // trigger for the calendar, button ID\n)
+        calendar_options.each { | key, value |
+          html << %(        #{key} : "#{value}",\n )
+        }
+#        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
+#        html << %(        ifFormat       :    "%m/%d/%Y",      // format of the input field\n)
+#        html << %(        button         :    "#{options[:id]}_trigger",  // trigger for the calendar, button ID\n)
         html << %(        singleClick    :    true\n)
         html << %(    }\);\n)
         html << %(</script>\n)
@@ -59,11 +72,24 @@ module ActionView
 
         html << %(<input type="text" name="#{options[:name]}" value="#{datetime}" class="#{options[:class]} text-input" id="#{options[:id]}" />\n)
         html << %(<img src="/images/calendar.png" id="#{options[:id]}_trigger" style="cursor: pointer;" title="Date & Time selector" />\n)
+
+        calendar_options = Hash.new
+        calendar_options.replace(options)
+        calendar_options["inputField"] ||= "#{options[:id]}"
+        calendar_options["ifFormat"] ||= "%m/%d/%Y %I:%M %p"
+        calendar_options["button"] ||= "#{options[:id]}_trigger"
+        calendar_options.delete_if! { | key, value |
+          [ :name, :class, :id, :object_name, :method ].include? key
+        }
+
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
-        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
-        html << %(        ifFormat       :    "%m/%d/%Y %I:%M %p",      // format of the input field\n)
-        html << %(        button         :    "#{options[:id]}_trigger",  // trigger for the calendar, button ID\n)
+        calendar_options.each { | key, value |
+          html << %(        #{key} : "#{value}",\n )
+        }
+#        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
+#        html << %(        ifFormat       :    "%m/%d/%Y %I:%M %p",      // format of the input field\n)
+#        html << %(        button         :    "#{options[:id]}_trigger",  // trigger for the calendar, button ID\n)
         html << %(        singleClick    :    true, \n)
         html << %(        showsTime      :    true, \n)
         html << %(        time24         :    false \n)
