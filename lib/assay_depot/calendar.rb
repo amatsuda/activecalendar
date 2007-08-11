@@ -78,7 +78,7 @@ module ActionView
         calendar_options["inputField"] ||= "#{options[:id]}"
         calendar_options["ifFormat"] ||= "%m/%d/%Y %I:%M %p"
         calendar_options["button"] ||= "#{options[:id]}_trigger"
-        calendar_options.delete_if! { | key, value |
+        calendar_options.delete_if { | key, value |
           [ :name, :class, :id, :object_name, :method ].include? key
         }
 
