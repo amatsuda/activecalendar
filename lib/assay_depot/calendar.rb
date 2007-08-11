@@ -10,10 +10,12 @@ module ActionView
           options[:id] = options[:name]
         end
 
+        options[:ifFormat] ||= "%m/%d/%Y"
+
         if value(object) == nil
           date = ""
         else
-          date = value(object).strftime("%m/%d/%Y")
+          date = value(object).strftime(options[:ifFormat])
         end
 
         error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
@@ -28,7 +30,6 @@ module ActionView
         calendar_options = Hash.new
         calendar_options.replace(options)
         calendar_options["inputField"] ||= "#{options[:id]}"
-        calendar_options["ifFormat"] ||= "%m/%d/%Y"
         calendar_options["button"] ||= "#{options[:id]}_trigger"
         calendar_options.delete_if { | key, value |
           [ :name, :class, :id, :object_name, :method ].include? key
@@ -37,7 +38,7 @@ module ActionView
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
         calendar_options.each { | key, value |
-          if key.to_s.eql? 'dateStatusFunc'
+          if(key.to_s.eql?('dateStatusFunc') || !value.instance_of?(String))
             html << %(        #{key} : #{value},\n )
           else
             html << %(        #{key} : "#{value}",\n )
@@ -62,10 +63,12 @@ module ActionView
           options[:id] = options[:name]
         end
 
+        options[:ifFormat] ||= "%m/%d/%Y %I:%M %p"
+
         if value(object) == nil
           datetime = ""
         else
-          datetime = value(object).strftime("%m/%d/%Y %I:%M %p")
+          datetime = value(object).strftime(options[:ifFormat])
         end
 
         error = !object.errors.nil? && !object.errors.on(options[:method]).nil?
@@ -80,7 +83,6 @@ module ActionView
         calendar_options = Hash.new
         calendar_options.replace(options)
         calendar_options["inputField"] ||= "#{options[:id]}"
-        calendar_options["ifFormat"] ||= "%m/%d/%Y %I:%M %p"
         calendar_options["button"] ||= "#{options[:id]}_trigger"
         calendar_options.delete_if { | key, value |
           [ :name, :class, :id, :object_name, :method ].include? key
@@ -89,15 +91,12 @@ module ActionView
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
         calendar_options.each { | key, value |
-          if key.to_s.eql? 'dateStatusFunc'
+          if(key.to_s.eql?('dateStatusFunc') || !value.instance_of?(String))
             html << %(        #{key} : #{value},\n )
           else
             html << %(        #{key} : "#{value}",\n )
           end
         }
-#        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
-#        html << %(        ifFormat       :    "%m/%d/%Y %I:%M %p",      // format of the input field\n)
-#        html << %(        button         :    "#{options[:id]}_trigger",  // trigger for the calendar, button ID\n)
         html << %(        singleClick    :    true, \n)
         html << %(        showsTime      :    true, \n)
         html << %(        time24         :    false \n)
