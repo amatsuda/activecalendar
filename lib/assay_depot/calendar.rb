@@ -37,7 +37,11 @@ module ActionView
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
         calendar_options.each { | key, value |
-          html << %(        #{key} : "#{value}",\n )
+          if key.to_s.eql? 'dateStatusFunc'
+            html << %(        #{key} : #{value},\n )
+          else
+            html << %(        #{key} : "#{value}",\n )
+          end
         }
 #        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
 #        html << %(        ifFormat       :    "%m/%d/%Y",      // format of the input field\n)
@@ -85,7 +89,11 @@ module ActionView
         html << %(<script type="text/javascript">\n)
         html << %(    Calendar.setup\({\n)
         calendar_options.each { | key, value |
-          html << %(        #{key} : "#{value}",\n )
+          if key.to_s.eql? 'dateStatusFunc'
+            html << %(        #{key} : #{value},\n )
+          else
+            html << %(        #{key} : "#{value}",\n )
+          end
         }
 #        html << %(        inputField     :    "#{options[:id]}",     // id of the input field\n)
 #        html << %(        ifFormat       :    "%m/%d/%Y %I:%M %p",      // format of the input field\n)
