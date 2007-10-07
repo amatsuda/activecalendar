@@ -212,30 +212,45 @@ class Date
     string = string.to_s.strip.downcase
     return nil if string.empty?
 
-    date_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/
-    datetime_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2}):(\d{1,2})\s+([a|p]m)$/i
+#    date_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/
+#    datetime_regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2}):(\d{1,2})\s+([a|p]m)$/i
+#
+#    if string.match(date_regex)
+#      # mm/dd/yyyy
+#      (( m, d, y )) = string.scan(date_regex)
+#      begin
+#        result = Date.new(y.to_i, m.to_i, d.to_i)
+#      rescue
+#        raise ArgumentError
+#      end
+#    elsif string.match(datetime_regex)
+#      # mm/dd/yyyy hh:mm am
+#      (( m, d, y, h, min, a )) = string.scan(datetime_regex)
+#      begin
+#        if a == "pm"
+#          h = h.to_i
+#          h += 12
+#        end
+#        result = DateTime.new(y.to_i, m.to_i, d.to_i, h.to_i, min.to_i)
+#      rescue
+#        raise ArgumentError
+#      end
+#    else
+#      raise ArgumentError
+#    end
+#    result
 
-    if string.match(date_regex)
-      # mm/dd/yyyy
-      (( m, d, y )) = string.scan(date_regex)
-      begin
-        result = Date.new(y.to_i, m.to_i, d.to_i)
-      rescue
-        raise ArgumentError
-      end
-    elsif string.match(datetime_regex)
-      # mm/dd/yyyy hh:mm am
-      (( m, d, y, h, min, a )) = string.scan(datetime_regex)
-      begin
-        if a == "pm"
-          h = h.to_i
-          h += 12
-        end
-        result = DateTime.new(y.to_i, m.to_i, d.to_i, h.to_i, min.to_i)
-      rescue
-        raise ArgumentError
-      end
-    else
+    # 
+    # [davidonlaptop at gmail dot com], Commented line 182 to 207.
+    # These were causing a problem when attempting to save a record with a date column
+    # when in console mode. The output format of the date was not matching this code above:
+    #
+    result = nil
+    begin
+      d = Date.parse(string)
+      dt = DateTime.parse(string)
+      result = (d == dt) ? d : dt
+    rescue
       raise ArgumentError
     end
     result
