@@ -10,7 +10,7 @@ module ActionView
           options[:id] = options[:name]
         end
 
-        options[:ifFormat] ||= "%m/%d/%Y"
+        options[:ifFormat] ||= "%Y/%m/%d"
 
         if value(object) == nil
           date = ""
