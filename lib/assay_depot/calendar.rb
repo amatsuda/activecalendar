@@ -112,14 +112,14 @@ module ActionView
     end
 
     module DateHelper
-      def date_select(object_name, method, options = {})
+      def date_select(object_name, method, options = {}, html_options = {})
         name = options[:name].nil? ? "#{object_name}[#{method}]" : options[:name]
         id = options[:id].nil? ? "#{object_name}_#{method}" : options[:id]
         options = options.merge( { :name => name, :id => id, :method => method, :object_name => object_name })
         InstanceTag.new(object_name, method, self, nil, options.delete(:object)).to_date_select_tag(options)
       end
 
-      def datetime_select(object_name, method, options = {})
+      def datetime_select(object_name, method, options = {}, html_options = {})
         name = options[:name].nil? ? "#{object_name}[#{method}]" : options[:name]
         id = options[:id].nil? ? "#{object_name}_#{method}" : options[:id]
         options = options.merge( { :name => name, :id => id, :method => method, :object_name => object_name })
