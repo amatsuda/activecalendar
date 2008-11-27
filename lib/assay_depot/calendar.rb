@@ -57,7 +57,7 @@ module ActionView
 
         html
       end
-      
+
       def depot_datetime_select(options = {})
         if(options[:id].blank?)
           options[:id] = options[:name]
@@ -116,14 +116,14 @@ module ActionView
         name = options[:name].nil? ? "#{object_name}[#{method}]" : options[:name]
         id = options[:id].nil? ? "#{object_name}_#{method}" : options[:id]
         options = options.merge( { :name => name, :id => id, :method => method, :object_name => object_name })
-        InstanceTag.new(object_name, method, self, nil, options.delete(:object)).to_date_select_tag(options)
+        InstanceTag.new(object_name, method, self, options.delete(:object)).to_date_select_tag(options)
       end
 
       def datetime_select(object_name, method, options = {}, html_options = {})
         name = options[:name].nil? ? "#{object_name}[#{method}]" : options[:name]
         id = options[:id].nil? ? "#{object_name}_#{method}" : options[:id]
         options = options.merge( { :name => name, :id => id, :method => method, :object_name => object_name })
-        InstanceTag.new(object_name, method, self, nil, options.delete(:object)).to_datetime_select_tag(options)
+        InstanceTag.new(object_name, method, self, options.delete(:object)).to_datetime_select_tag(options)
       end
     end
 
@@ -240,7 +240,7 @@ class Date
 #    end
 #    result
 
-    # 
+    #
     # [davidonlaptop at gmail dot com], Commented line 182 to 207.
     # These were causing a problem when attempting to save a record with a date column
     # when in console mode. The output format of the date was not matching this code above:
