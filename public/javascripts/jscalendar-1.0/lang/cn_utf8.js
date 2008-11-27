@@ -59,6 +59,8 @@ Calendar._MN = new Array
  "\u5341\u4e00\u6708",
  "\u5341\u4e8c\u6708");
 
+Calendar._FD = 0;
+
 // short month names
 Calendar._SMN = new Array
 ("\u4e00\u6708",
